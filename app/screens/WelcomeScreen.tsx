@@ -11,7 +11,7 @@ import { typography } from "../theme"
 
 interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
 
-export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
+export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen(_props) {
   return (
     <View style={$container}>
       <LinearGradient
@@ -26,7 +26,12 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeSc
             colors={["rgba(255,230,51,255)", "rgba(251,162,2,255)"]}
             style={$bottomGradientBg}
           />
-          <TouchableOpacity style={$touchAble}>
+          <TouchableOpacity
+            style={$touchAble}
+            onPress={() => {
+              _props.navigation.navigate("Home")
+            }}
+          >
             <Text style={$buttonTextStyle}>Let's Go</Text>
           </TouchableOpacity>
         </MaskedView>

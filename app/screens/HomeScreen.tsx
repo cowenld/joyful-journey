@@ -1,9 +1,9 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
+import { ViewStyle, StyleSheet } from "react-native"
 import { AppStackScreenProps } from "app/navigators"
-import { Screen, Text } from "app/components"
-// import { useNavigation } from "@react-navigation/native"
+import { Screen } from "app/components"
+import MapView from "react-native-maps"
 // import { useStores } from "app/models"
 
 interface HomeScreenProps extends AppStackScreenProps<"Home"> {}
@@ -13,10 +13,9 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   // const { someStore, anotherStore } = useStores()
 
   // Pull in navigation via hook
-  // const navigation = useNavigation()
   return (
-    <Screen style={$root} preset="scroll">
-      <Text text="home" />
+    <Screen style={$root}>
+      <MapView style={styles.map} />
     </Screen>
   )
 })
@@ -24,3 +23,13 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
 const $root: ViewStyle = {
   flex: 1,
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  map: {
+    width: "100%",
+    height: "100%",
+  },
+})
