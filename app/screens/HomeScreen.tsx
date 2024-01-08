@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, StyleSheet } from "react-native"
+import { ViewStyle, StyleSheet, View } from "react-native"
 import { AppStackScreenProps } from "app/navigators"
 import { Screen } from "app/components"
 import MapView, { Camera, Marker } from "react-native-maps"
@@ -48,7 +48,10 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
         <MapView ref={mapRef} style={styles.map}>
           {camera && (
             <Marker
-              coordinate={{ latitude: camera.center.latitude, longitude: camera.center.longitude }}
+              coordinate={{
+                latitude: camera.center.latitude,
+                longitude: camera.center.longitude,
+              }}
             >
               <Character />
             </Marker>
@@ -69,6 +72,6 @@ const styles = StyleSheet.create({
   },
   map: {
     width: "100%",
-    height: "100%",
+    height: "125%",
   },
 })
