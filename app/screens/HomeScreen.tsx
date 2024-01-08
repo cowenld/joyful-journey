@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, StyleSheet, View } from "react-native"
+import { ViewStyle, StyleSheet, Animated } from "react-native"
 import { AppStackScreenProps } from "app/navigators"
 import { Screen } from "app/components"
 import MapView, { Camera, Marker } from "react-native-maps"
@@ -13,7 +13,7 @@ interface HomeScreenProps extends AppStackScreenProps<"Home"> {}
 
 export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   const mapRef = useRef<MapView>(null)
-  const [camera, setCameraLocation] = React.useState<Camera | null>(null)
+  const [initialCamera, setInitialCamera] = React.useState<Camera>()
 
   useEffect(() => {
     const setCamera = async () => {
@@ -25,38 +25,36 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
           longitude: location.coords.longitude,
         },
         pitch: 75,
-        heading: 0,
+        heading: location.coords.heading || 0,
         altitude: 500,
         zoom: 18,
       }
 
-      setCameraLocation(camera)
+      if (!initialCamera) {
+        setInitialCamera(camera)
+      }
+
+      if (mapRef.current && initialCamera) {
+        mapRef.current.animateCamera(camera, { duration: 1000 })
+      }
     }
 
-    setCamera()
-  }, [])
+    const intervalId = setInterval(setCamera, 450)
 
-  useEffect(() => {
-    if (camera && mapRef.current) {
-      mapRef.current.animateCamera(camera, { duration: 2000 })
-    }
-  }, [camera])
+    return () => clearInterval(intervalId)
+  }, [initialCamera])
 
   return (
     <Permissions>
       <Screen style={$root}>
-        <MapView ref={mapRef} style={styles.map}>
-          {camera && (
-            <Marker
-              coordinate={{
-                latitude: camera.center.latitude,
-                longitude: camera.center.longitude,
-              }}
-            >
-              <Character />
-            </Marker>
-          )}
-        </MapView>
+        <MapView
+          showsPointsOfInterest={false}
+          showsTraffic={false}
+          initialCamera={initialCamera}
+          ref={mapRef}
+          style={styles.map}
+        ></MapView>
+        <Character />
       </Screen>
     </Permissions>
   )

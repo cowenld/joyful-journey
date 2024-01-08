@@ -41,6 +41,11 @@ export const Character = () => {
 const $viewStyle: ViewStyle = {
   width: 50,
   height: 50,
+  position: "absolute",
+  bottom: "40%",
+  left: "50%",
+  marginLeft: -25,
+  marginBottom: -25,
 }
 
 const $world: ImageStyle = {
